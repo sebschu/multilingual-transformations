@@ -512,7 +512,7 @@ def main():
                     logger.info(f"  {key} = {value}")
                     writer.write(f"{key} = {value}\n")
         
-        predictions = trainer.predict(test_dataset=eval_dataset)
+        predictions = trainer.predict(test_dataset=eval_dataset, max_length=100)
         output_pred_file = os.path.join(training_args.output_dir, "eval_predictions_seq2seq.txt")
         if trainer.is_world_process_zero():
             with open(output_pred_file, "w") as writer:
