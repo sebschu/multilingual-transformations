@@ -381,8 +381,10 @@ def main():
 
     def preprocess_function(examples):
         if data_args.task.startswith("translation"):
-            inputs = [ex["prefix"] + ex[source_lang] for ex in examples["translation"]]
-            targets = [ex[target_lang] for ex in examples["translation"]]
+            #inputs = [ex["prefix"] + ex[source_lang] for ex in examples["translation"]]
+            #targets = [ex[target_lang] for ex in examples["translation"]]
+            inputs = [ex["prefix"] + ex["src"] for ex in examples["translation"]]
+            targets = [ex["tgt"] for ex in examples["translation"]]
         else:
             inputs = examples[text_column]
             targets = examples[summary_column]
