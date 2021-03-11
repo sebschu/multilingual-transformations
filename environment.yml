@@ -1,0 +1,58 @@
+name: py38
+channels:
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - ca-certificates=2021.1.19=h06a4308_1
+  - certifi=2020.12.5=py38h06a4308_0
+  - ld_impl_linux-64=2.33.1=h53a641e_7
+  - libedit=3.1.20191231=h14c3975_1
+  - libffi=3.3=he6710b0_2
+  - libgcc-ng=9.1.0=hdf63c60_0
+  - libstdcxx-ng=9.1.0=hdf63c60_0
+  - ncurses=6.2=he6710b0_1
+  - openssl=1.1.1j=h27cfd23_0
+  - pip=21.0.1=py38h06a4308_0
+  - python=3.8.8=hdb3f193_4
+  - readline=8.1=h27cfd23_0
+  - setuptools=52.0.0=py38h06a4308_0
+  - sqlite=3.33.0=h62c20be_0
+  - tk=8.6.10=hbc83047_0
+  - wheel=0.36.2=pyhd3eb1b0_0
+  - xz=5.2.5=h7b6447c_0
+  - zlib=1.2.11=h7b6447c_3
+  - pip:
+    - chardet==4.0.0
+    - click==7.1.2
+    - datasets==1.4.1
+    - dill==0.3.3
+    - filelock==3.0.12
+    - fsspec==0.8.7
+    - huggingface-hub==0.0.2
+    - idna==2.10
+    - joblib==1.0.1
+    - multiprocess==0.70.11.1
+    - numpy==1.20.1
+    - packaging==20.9
+    - pandas==1.2.3
+    - portalocker==2.0.0
+    - protobuf==3.15.5
+    - pyarrow==3.0.0
+    - pyparsing==2.4.7
+    - python-dateutil==2.8.1
+    - pytz==2021.1
+    - regex==2020.11.13
+    - requests==2.25.1
+    - sacrebleu==1.5.1
+    - sacremoses==0.0.43
+    - sentencepiece==0.1.95
+    - six==1.15.0
+    - tokenizers==0.10.1
+    - torch==1.8.0
+    - tqdm==4.49.0
+    - transformers==4.3.3
+    - typing-extensions==3.7.4.3
+    - urllib3==1.26.3
+    - xxhash==2.0.0
+prefix: /home/ss9536/.conda/envs/py38
+
