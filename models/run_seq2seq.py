@@ -506,7 +506,7 @@ def main():
 
         results = trainer.evaluate()
 
-        output_eval_file = os.path.join(training_args.output_dir, "eval_results_seq2seq.txt")
+        output_eval_file = os.path.join(training_args.output_dir, os.path.basename(data_args.validation_file).replace(".json", "") + ".eval_results_seq2seq.txt")
         if trainer.is_world_process_zero():
             with open(output_eval_file, "w") as writer:
                 logger.info("***** Eval results *****")
@@ -515,7 +515,7 @@ def main():
                     writer.write(f"{key} = {value}\n")
         
         predictions = trainer.predict(test_dataset=eval_dataset, max_length=100)
-        output_pred_file = os.path.join(training_args.output_dir, "eval_predictions_seq2seq.txt")
+        output_pred_file = os.path.join(training_args.output_dir, os.path.basename(data_args.validation_file).replace(".json", "") + ".eval_preds_seq2seq.txt")
         if trainer.is_world_process_zero():
             with open(output_pred_file, "w") as writer:
                 for pred in tokenizer.batch_decode(predictions.predictions, skip_special_tokens=True):
