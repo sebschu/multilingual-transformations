@@ -21,6 +21,7 @@ import logging
 import os
 import re
 import sys
+import glob
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -42,6 +43,7 @@ from transformers import (
 )
 from transformers.trainer_utils import is_main_process
 
+from pred_eval import evaluate_predictions
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +112,10 @@ class DataTrainingArguments:
         metadata={"help": "The name of the column in the datasets containing the summaries (for summarization)."},
     )
     train_file: Optional[str] = field(default=None, metadata={"help": "The input training data file (a text file)."})
+    
+    do_learning_curve: bool = field(default=False, metadata={"help": "Whether to run predictions on all checkpoints for a learning curve."})
+    
+    
     validation_file: Optional[str] = field(
         default=None,
         metadata={"help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."},
@@ -521,6 +527,41 @@ def main():
                 for pred in tokenizer.batch_decode(predictions.predictions, skip_special_tokens=True):
                     writer.write(pred + "\n")
         
+    if data_args.do_learning_curve:
+      for path in glob.glob(os.path.join(model_args.model_name_or_path, "*", "")):
+        model = AutoModelForSeq2SeqLM.from_pretrained(
+            path,
+            from_tf=bool(".ckpt" in model_args.model_name_or_path),
+            config=config,
+            cache_dir=model_args.cache_dir,
+            revision=model_args.model_revision,
+            use_auth_token=True if model_args.use_auth_token else None,
+        )
+        
+        trainer = Seq2SeqTrainer(
+            model=model,
+            args=training_args,
+            train_dataset=train_dataset if training_args.do_train else None,
+            eval_dataset=eval_dataset if training_args.do_eval else None,
+            tokenizer=tokenizer,
+            data_collator=data_collator,
+            compute_metrics=compute_metrics if training_args.predict_with_generate else None,
+        )
+        
+        predictions = trainer.predict(test_dataset=eval_dataset, max_length=100)
+        output_pred_file = os.path.join(path, os.path.basename(data_args.validation_file).replace(".json", "") + ".eval_preds_seq2seq.txt")
+        if trainer.is_world_process_zero():
+            with open(output_pred_file, "w") as writer:
+                for pred in tokenizer.batch_decode(predictions.predictions, skip_special_tokens=True):
+                    writer.write(pred + "\n")
+        
+        output_eval_file = os.path.join(path, os.path.basename(data_args.validation_file).replace(".json", "") + ".eval_results_seq2seq.txt")
+        first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file)
+        if trainer.is_world_process_zero():
+            with open(output_eval_file, "w") as writer:
+              writer.write(f"Exact match accuracy: {full_acc}\n")
+              writer.write(f"First word accuracy: {first_acc}\n")
+              
 
     return results
 
