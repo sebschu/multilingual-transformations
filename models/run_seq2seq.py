@@ -423,7 +423,7 @@ def main():
             load_from_cache_file=not data_args.overwrite_cache,
         )
 
-    if training_args.do_eval:
+    if training_args.do_eval or data_args.do_learning_curve:
         max_target_length = data_args.val_max_target_length
         eval_dataset = datasets["validation"]
         if data_args.max_val_samples is not None:

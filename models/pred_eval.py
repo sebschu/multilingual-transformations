@@ -17,7 +17,7 @@ def evaluate_predictions(pred_filename, gold_filename):
       pred_line = pred_lines[i].strip()
       if gold_filename.endswith(".json"):
         gold_json = json.loads(gold_lines[i])
-        gold_line = gold_json["prediction"]["tgt"]
+        gold_line = gold_json["translation"]["tgt"]
       else:  
         gold_line = gold_lines[i].strip().split("\t")[1]
       # remove space before period/question mark
