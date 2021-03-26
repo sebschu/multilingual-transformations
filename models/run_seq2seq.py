@@ -12,6 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# adapted from https://github.com/huggingface/transformers/tree/master/examples/seq2seq
+
 """
 Fine-tuning the library models for sequence to sequence.
 """
@@ -22,6 +25,7 @@ import os
 import re
 import sys
 import glob
+from operator import itemgetter
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -44,6 +48,8 @@ from transformers import (
 from transformers.trainer_utils import is_main_process
 
 from pred_eval import evaluate_predictions
+
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
@@ -112,10 +118,10 @@ class DataTrainingArguments:
         metadata={"help": "The name of the column in the datasets containing the summaries (for summarization)."},
     )
     train_file: Optional[str] = field(default=None, metadata={"help": "The input training data file (a text file)."})
-    
+
     do_learning_curve: bool = field(default=False, metadata={"help": "Whether to run predictions on all checkpoints for a learning curve."})
-    
-    
+
+
     validation_file: Optional[str] = field(
         default=None,
         metadata={"help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."},
@@ -201,21 +207,6 @@ class DataTrainingArguments:
             )
         if self.val_max_target_length is None:
             self.val_max_target_length = self.max_target_length
-
-
-summarization_name_mapping = {
-    "amazon_reviews_multi": ("review_body", "review_title"),
-    "big_patent": ("description", "abstract"),
-    "cnn_dailymail": ("article", "highlights"),
-    "orange_sum": ("text", "summary"),
-    "pn_summary": ("article", "summary"),
-    "psc": ("extract_text", "summary_text"),
-    "samsum": ("dialogue", "summary"),
-    "thaisum": ("body", "summary"),
-    "xglue": ("news_body", "news_title"),
-    "xsum": ("document", "summary"),
-    "wiki_summary": ("article", "highlights"),
-}
 
 
 def main():
@@ -351,49 +342,34 @@ def main():
     # them all).
     source_lang, target_lang, text_column, summary_column = None, None, None, None
 
-    if data_args.task.startswith("summarization"):
-        # Get the column names for input/target.
-        dataset_columns = summarization_name_mapping.get(data_args.dataset_name, None)
-        if data_args.text_column is None:
-            text_column = dataset_columns[0] if dataset_columns is not None else column_names[0]
-        else:
-            text_column = data_args.text_column
-        if data_args.summary_column is None:
-            summary_column = dataset_columns[1] if dataset_columns is not None else column_names[1]
-        else:
-            summary_column = data_args.summary_column
-    else:
-        # Get the language codes for input/target.
-        lang_search = re.match("translation_([a-z]+)_to_([a-z]+)", data_args.task)
-        if data_args.source_lang is not None:
-            source_lang = data_args.source_lang.split("_")[0]
-        else:
-            assert (
-                lang_search is not None
-            ), "Provide a source language via --source_lang or rename your task 'translation_xx_to_yy'."
-            source_lang = lang_search.groups()[0]
 
-        if data_args.target_lang is not None:
-            target_lang = data_args.target_lang.split("_")[0]
-        else:
-            assert (
-                lang_search is not None
-            ), "Provide a target language via --target_lang or rename your task 'translation_xx_to_yy'."
-            target_lang = lang_search.groups()[1]
+    # Get the language codes for input/target.
+    lang_search = re.match("translation_([a-z]+)_to_([a-z]+)", data_args.task)
+    if data_args.source_lang is not None:
+        source_lang = data_args.source_lang.split("_")[0]
+    else:
+        assert (
+            lang_search is not None
+        ), "Provide a source language via --source_lang or rename your task 'translation_xx_to_yy'."
+        source_lang = lang_search.groups()[0]
+
+    if data_args.target_lang is not None:
+        target_lang = data_args.target_lang.split("_")[0]
+    else:
+        assert (
+            lang_search is not None
+        ), "Provide a target language via --target_lang or rename your task 'translation_xx_to_yy'."
+        target_lang = lang_search.groups()[1]
 
     # Temporarily set max_target_length for training.
     max_target_length = data_args.max_target_length
     padding = "max_length" if data_args.pad_to_max_length else False
 
     def preprocess_function(examples):
-        if data_args.task.startswith("translation"):
-            #inputs = [ex["prefix"] + ex[source_lang] for ex in examples["translation"]]
-            #targets = [ex[target_lang] for ex in examples["translation"]]
-            inputs = [ex["prefix"] + ex["src"] for ex in examples["translation"]]
-            targets = [ex["tgt"] for ex in examples["translation"]]
-        else:
-            inputs = examples[text_column]
-            targets = examples[summary_column]
+
+        inputs = [ex["prefix"] + ex["src"] for ex in examples["translation"]]
+        targets = [ex["tgt"] for ex in examples["translation"]]
+
         inputs = [prefix + inp for inp in inputs]
         model_inputs = tokenizer(inputs, max_length=data_args.max_source_length, padding=padding, truncation=True)
 
@@ -510,25 +486,35 @@ def main():
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
 
-        results = trainer.evaluate()
+        basename = os.path.basename(data_args.validation_file).replace(".json", "")
 
-        output_eval_file = os.path.join(training_args.output_dir, os.path.basename(data_args.validation_file).replace(".json", "") + ".eval_results_seq2seq.txt")
-        if trainer.is_world_process_zero():
-            with open(output_eval_file, "w") as writer:
-                logger.info("***** Eval results *****")
-                for key, value in sorted(results.items()):
-                    logger.info(f"  {key} = {value}")
-                    writer.write(f"{key} = {value}\n")
-        
         predictions = trainer.predict(test_dataset=eval_dataset, max_length=100)
-        output_pred_file = os.path.join(training_args.output_dir, os.path.basename(data_args.validation_file).replace(".json", "") + ".eval_preds_seq2seq.txt")
+        output_pred_file = os.path.join(training_args.output_dir, basename + ".eval_preds_seq2seq.txt")
         if trainer.is_world_process_zero():
             with open(output_pred_file, "w") as writer:
                 for pred in tokenizer.batch_decode(predictions.predictions, skip_special_tokens=True):
                     writer.write(pred + "\n")
-        
+
+        output_eval_file = os.path.join(training_args.output_dir, basename + ".eval_results_seq2seq.txt")
+        first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file)
+        if trainer.is_world_process_zero():
+            with open(output_eval_file, "w") as writer:
+                writer.write(f"Exact match accuracy: {full_acc}\n")
+                writer.write(f"First word accuracy: {first_acc}\n")
+
+
+
     if data_args.do_learning_curve:
-      for path in glob.glob(os.path.join(model_args.model_name_or_path, "*", "")):
+
+      basename = os.path.basename(data_args.validation_file).replace(".json", "")
+
+      for path in glob.glob(os.path.join(training_args.output_dir, "checkpoint-*", "")):
+        output_pred_file = os.path.join(path, basename + ".eval_preds_seq2seq.txt")
+
+        # do not re-compute predictions if they already exist
+        if os.path.exists(output_pred_file):
+            continue
+
         model = AutoModelForSeq2SeqLM.from_pretrained(
             path,
             from_tf=bool(".ckpt" in model_args.model_name_or_path),
@@ -537,7 +523,7 @@ def main():
             revision=model_args.model_revision,
             use_auth_token=True if model_args.use_auth_token else None,
         )
-        
+
         trainer = Seq2SeqTrainer(
             model=model,
             args=training_args,
@@ -547,22 +533,41 @@ def main():
             data_collator=data_collator,
             compute_metrics=compute_metrics if training_args.predict_with_generate else None,
         )
-        
+
         predictions = trainer.predict(test_dataset=eval_dataset, max_length=100)
-        output_pred_file = os.path.join(path, os.path.basename(data_args.validation_file).replace(".json", "") + ".eval_preds_seq2seq.txt")
         if trainer.is_world_process_zero():
             with open(output_pred_file, "w") as writer:
                 for pred in tokenizer.batch_decode(predictions.predictions, skip_special_tokens=True):
                     writer.write(pred + "\n")
-        
-        output_eval_file = os.path.join(path, os.path.basename(data_args.validation_file).replace(".json", "") + ".eval_results_seq2seq.txt")
+
+        output_eval_file = os.path.join(path, basename + ".eval_results_seq2seq.txt")
         first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file)
+        it_res = re.match(".*checkpoint-([0-9]+)[/].*", path)
+        it = it_res.group(1)
         if trainer.is_world_process_zero():
             with open(output_eval_file, "w") as writer:
-              writer.write(f"Exact match accuracy: {full_acc}\n")
-              writer.write(f"First word accuracy: {first_acc}\n")
-              
+              writer.write("iteration,exact_match,first_word_accuracy\n")
+              writer.write(f"{it},{full_acc},{first_acc}\n")
 
+    # plot learning curve
+
+    eval_triples = []
+    for path in glob.glob(os.path.join(training_args.output_dir, "checkpoint-*", "")):
+        basename = os.path.basename(data_args.validation_file).replace(".json", "")
+        eval_file = os.path.join(path, basename + ".eval_results_seq2seq.txt")
+        with open(eval_file, "r") as reader:
+            reader.readline()
+            parts = reader.readline().strip().split(",")
+            eval_triples.append((int(parts[0]), float(parts[1]), float(parts[2])))
+
+
+    eval_triples_s = sorted(eval_triples, key=itemgetter(0))
+    its, full_accs, first_accs = zip(*eval_triples_s)
+    plt.plot(its,full_accs, label="exact match")
+    plt.plot(its,first_accs, label="first word accuracy")
+    plt.legend()
+    plt.savefig(os.path.join(training_args.output_dir, basename + ".learning_curve.png"))
+    
     return results
 
 
@@ -573,3 +578,4 @@ def _mp_fn(index):
 
 if __name__ == "__main__":
     main()
+
