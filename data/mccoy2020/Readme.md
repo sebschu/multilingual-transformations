@@ -11,17 +11,17 @@
     
     (All sentences have obligatory do-support)
         
-        * Transitive and intransitive sentences without relative clauses: (No RelCl)
+    * Transitive and intransitive sentences without relative clauses: (No RelCl)
         
-            _The zebra does annoy my yak ._
+         _The zebra does annoy my yak ._
         
-        * Transitive and intransitive sentences with relative clause on subject NP (RelCl-on-subj):
+    * Transitive and intransitive sentences with relative clause on subject NP (RelCl-on-subj):
         
-           _ The zebra that doesn't chuckle does annoy my yak ._
+         _ The zebra that doesn't chuckle does annoy my yak ._
         
-        * Transitive and intransitive sentences with relative clause on object NP (RelCl-on-obj):
+    * Transitive and intransitive sentences with relative clause on object NP (RelCl-on-obj):
 
-           _ The zebra does annoy my yak that doesn't chuckle ._
+         _ The zebra does annoy my yak that doesn't chuckle ._
            
 2. Questions
 
@@ -29,19 +29,19 @@
     
     Sentence types:
     
-     (All sentences have obligatory do-support)
+    (All sentences have obligatory do-support)
         
-        * Transitive and intransitive sentences without relative clauses: (No RelCl)
+    * Transitive and intransitive sentences without relative clauses: (No RelCl)
         
-            _The zebra does annoy my yak ._
+        _The zebra does annoy my yak ._
         
-        * Transitive and intransitive sentences with relative clause on subject NP (RelCl-on-subj):
+    * Transitive and intransitive sentences with relative clause on subject NP (RelCl-on-subj):
         
-           _ The zebra that doesn't chuckle does annoy my yak ._
+        _ The zebra that doesn't chuckle does annoy my yak ._
         
-        * Transitive and intransitive sentences with relative clause on object NP (RelCl-on-obj):
+    * Transitive and intransitive sentences with relative clause on object NP (RelCl-on-obj):
 
-           _ The zebra does annoy my yak that doesn't chuckle ._
+        _ The zebra does annoy my yak that doesn't chuckle ._
 
 ## Files
 
