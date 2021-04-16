@@ -9,7 +9,7 @@
     
     Sentence types:
     
-        (All sentences have obligatory do-support)
+    (All sentences have obligatory do-support)
         
         * Transitive and intransitive sentences without relative clauses: (No RelCl)
         
@@ -29,7 +29,7 @@
     
     Sentence types:
     
-        (All sentences have obligatory do-support)
+     (All sentences have obligatory do-support)
         
         * Transitive and intransitive sentences without relative clauses: (No RelCl)
         
