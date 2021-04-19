@@ -1,4 +1,4 @@
-# German question "have-be" data
+# German question "have-can" data
 
 A German dataset similar to the English "have" data. All verbs
 are either in perfect tense with the auxiliary _have_ (_hat_) or are embedded under the modal can (_können_).
