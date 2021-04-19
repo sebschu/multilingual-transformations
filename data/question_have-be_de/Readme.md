@@ -12,7 +12,7 @@ as auxiliaries.
     
     Sentence types:
     
-    (All verbs use _have_/_has_/_haven't_/_hasn't_ as auxiliaries.)
+    (All verbs use _have_/_has_/are/is as auxiliaries.)
         
     * Transitive and intransitive sentences without relative clauses: (No RelCl)
         
@@ -24,7 +24,7 @@ as auxiliaries.
         
     * Transitive and intransitive sentences with relative clause on object NP (RelCl-on-obj):
 
-         _Der Wellensittich hat meinen Hund genervt, der geschwommen ist._
+         _Der Wellensittich hat meinen Hund, der geschwommen ist, genervt ._
            
 2. Questions
 
@@ -44,7 +44,7 @@ as auxiliaries.
         
     * Transitive and intransitive sentences with relative clause on object NP (RelCl-on-obj):
 
-         _Der Wellensittich hat meinen Hund genervt, der geschwommen ist._
+         _Der Wellensittich hat meinen Hund, der geschwommen ist, genervt ._
 
 ## Files
 
