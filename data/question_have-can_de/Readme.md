@@ -47,11 +47,11 @@ are either in perfect tense with the auxiliary _have_ (_hat_) or are embedded un
 
 ## Files
 
-* `question_have.de.train(.json)`: 100,000 training examples; includes all 3 types of declarative transformations (No RelCl, RelCl-on-subj, RelCl-obj) 
-* `question_have.de.dev(.json)`: 10,000 development examples; includes all 3 types of declarative sentences (No RelCl, RelCl-on-subj, RelCl-obj) 
-* `question_have.de.test(.json)`: 10,000 test examples; includes all 3 types of declarative sentences (No RelCl, RelCl-on-subj, RelCl-obj) 
-* `question_have.de.gen_rc_o(.json)`: 10,000 generalization examples; includes only RelCl-on-obj examples; _have_/_can__ are matched for person in the relative clause and the main clause, the auxiliary in either the relative clause or the main clause is _can_
-* `question_have.de.gen_rc_s(.json)`: 10,000 generalization examples; includes only RelCl-on-subj examples; _have_/_can_ are matched for person in the relative clause and the main clause, the auxiliary in either the relative clause or the main clause is _can_
-* `question_have.en-de.train(.json)`: 200,000 training examples; combines the 100,00 English training examples from the question_have-havent dataset and the 100,000 German training examples from this dataset.  Half of the English examples are declaratives and half are questions (No RelCl or RelCl-on-obj); the German examples are all declarative sentenes.
+* `question_have_can.de.train(.json)`: 100,000 training examples; includes all 3 types of declarative transformations (No RelCl, RelCl-on-subj, RelCl-obj) 
+* `question_have_can.de.dev(.json)`: 10,000 development examples; includes all 3 types of declarative sentences (No RelCl, RelCl-on-subj, RelCl-obj) 
+* `question_have_can.de.test(.json)`: 10,000 test examples; includes all 3 types of declarative sentences (No RelCl, RelCl-on-subj, RelCl-obj) 
+* `question_have_can.de.gen_rc_o(.json)`: 10,000 generalization examples; includes only RelCl-on-obj examples; _have_/_can__ are matched for person in the relative clause and the main clause, the auxiliary in either the relative clause or the main clause is _can_
+* `question_have_can.de.gen_rc_s(.json)`: 10,000 generalization examples; includes only RelCl-on-subj examples; _have_/_can_ are matched for person in the relative clause and the main clause, the auxiliary in either the relative clause or the main clause is _can_
+* `question_have_can.en-de.train(.json)`: 200,000 training examples; combines the 100,00 English training examples from the question_have-havent dataset and the 100,000 German training examples from this dataset.  Half of the English examples are declaratives and half are questions (No RelCl or RelCl-on-obj); the German examples are all declarative sentenes.
 
 
