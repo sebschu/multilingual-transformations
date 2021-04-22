@@ -549,24 +549,24 @@ def main():
               writer.write("iteration,exact_match,first_word_accuracy\n")
               writer.write(f"{it},{full_acc},{first_acc}\n")
 
-    # plot learning curve
-
-    eval_triples = []
-    for path in glob.glob(os.path.join(training_args.output_dir, "checkpoint-*", "")):
-        basename = os.path.basename(data_args.validation_file).replace(".json", "")
-        eval_file = os.path.join(path, basename + ".eval_results_seq2seq.txt")
-        with open(eval_file, "r") as reader:
-            reader.readline()
-            parts = reader.readline().strip().split(",")
-            eval_triples.append((int(parts[0]), float(parts[1]), float(parts[2])))
-
-
-    eval_triples_s = sorted(eval_triples, key=itemgetter(0))
-    its, full_accs, first_accs = zip(*eval_triples_s)
-    plt.plot(its,full_accs, label="exact match")
-    plt.plot(its,first_accs, label="first word accuracy")
-    plt.legend()
-    plt.savefig(os.path.join(training_args.output_dir, basename + ".learning_curve.png"))
+      # plot learning curve
+      
+      eval_triples = []
+      for path in glob.glob(os.path.join(training_args.output_dir, "checkpoint-*", "")):
+          basename = os.path.basename(data_args.validation_file).replace(".json", "")
+          eval_file = os.path.join(path, basename + ".eval_results_seq2seq.txt")
+          with open(eval_file, "r") as reader:
+              reader.readline()
+              parts = reader.readline().strip().split(",")
+              eval_triples.append((int(parts[0]), float(parts[1]), float(parts[2])))
+      
+      
+      eval_triples_s = sorted(eval_triples, key=itemgetter(0))
+      its, full_accs, first_accs = zip(*eval_triples_s)
+      plt.plot(its,full_accs, label="exact match")
+      plt.plot(its,first_accs, label="first word accuracy")
+      plt.legend()
+      plt.savefig(os.path.join(training_args.output_dir, basename + ".learning_curve.png"))
     
     return results
 
