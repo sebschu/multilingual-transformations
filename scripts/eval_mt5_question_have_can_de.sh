@@ -14,7 +14,7 @@ singularity exec --nv --overlay $SCRATCH/overlay-50G-10M.ext3:ro /scratch/work/p
 source /ext3/env.sh
 conda activate py38
 
-CUDA_LAUNCH_BLOCKING=1 python ../models/run_seq2seq.py \
+python ../models/run_seq2seq.py \
     --model_name_or_path 'google/mt5-base' \
 	--do_eval \
 	--do_learning_curve \
