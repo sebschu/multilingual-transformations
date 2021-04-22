@@ -21,7 +21,7 @@ def evaluate_predictions(pred_filename, gold_filename):
       else:  
         gold_line = gold_lines[i].strip().split("\t")[1]
       # remove space before period/question mark
-      gold_line = gold_line.replace(" ?", "?").replace(" .", ".") 
+      gold_line = gold_line.replace(" ?", "?").replace(" .", ".").replace(" ,", ",") 
       
       total +=1
       
@@ -31,7 +31,7 @@ def evaluate_predictions(pred_filename, gold_filename):
       else:
         pred_words = pred_line.split()
         gold_words = gold_line.split()
-        if pred_words[0] == gold_words[0]:
+        if len(pred_words) > 0 and pred_words[0] == gold_words[0]:
           first_correct += 1
       
   
