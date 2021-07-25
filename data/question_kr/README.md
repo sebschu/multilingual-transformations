@@ -14,15 +14,15 @@ A Korean dataset similar to the English and German datasets. All verbs are in th
         
     * Transitive and intransitive sentences without relative clauses: (No RelCl)
         
-         _코끼리가 사슴을 보고 있다 ._
+         _코끼리가 사슴을 보고있다 ._
         
     * Transitive and intransitive sentences with relative clause on subject NP (RelCl-on-subj):
         
-         _꽃을 먹고 있는 코끼리가 사슴을 보고 있다 ._
+         _꽃을 먹고 있는 코끼리가 사슴을 보고있다 ._
         
     * Transitive and intransitive sentences with relative clause on object NP (RelCl-on-obj):
 
-         _코끼리가 꽃을 먹고 있는 사슴을 보고 있다 ._
+         _코끼리가 꽃을 먹고 있는 사슴을 보고있다 ._
          
 2. Questions
 
@@ -34,14 +34,14 @@ A Korean dataset similar to the English and German datasets. All verbs are in th
         
     * Transitive and intransitive sentences without relative clauses: (No RelCl)
         
-        _코끼리가 사슴을 보고 있니 ._
+        _코끼리가 사슴을 보고있니 ._
         
     * Transitive and intransitive sentences with relative clause on subject NP (RelCl-on-subj):
         
-         _꽃을 먹고 있는 코끼리가 사슴을 보고 있니 ._
+         _꽃을 먹고 있는 코끼리가 사슴을 보고있니 ._
         
     * Transitive and intransitive sentences with relative clause on object NP (RelCl-on-obj):
 
-         _코끼리가 꽃을 먹고 있는 사슴을 보고 있니 ._
+         _코끼리가 꽃을 먹고 있는 사슴을 보고있니 ._
 
 ## Files   
