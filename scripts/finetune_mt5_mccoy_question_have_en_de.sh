@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=MT-base-finetune
+#SBATCH --job-name=MT-base-finetune-de
 #SBATCH --nodes=1 
 #SBATCH --cpus-per-task=1 
 #SBATCH --mem=20GB 
@@ -18,9 +18,9 @@ python ../models/run_seq2seq.py \
     --model_name_or_path 'google/mt5-base' \
     --do_train \
     --task translation_src_to_tgt \
-    --train_file ../data/mccoy2020/question_have.en-de.train.json \
-    --validation_file ../data/mccoy2020/question_have.de.dev.json \
-    --output_dir /scratch/ss9536/mt5-mccoy-finetuning-question-have-en-de/  \
+    --train_file ../data/question_have-can_de/question_have_can.en_de.train.json \
+    --validation_file ../data/question_have-can_de/question_have_can.en_de.dev.json \
+    --output_dir /scratch/am12057/mt5-mccoy-finetuning-question-have-can-en-de/  \
     --per_device_train_batch_size=4 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \

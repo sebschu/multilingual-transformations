@@ -88,6 +88,12 @@ class ModelArguments:
             "with private models)."
         },
     )
+    random_weights: bool = field(
+        default=False,
+        metadata={
+            "help": "Randomize weights when loading a model."
+        },
+    )
 
 
 @dataclass
@@ -306,6 +312,9 @@ def main():
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
+    if model_args.random_weights:
+        logger.info("Randomizing weights")
+        model.init_weights()
 
     # Set decoder_start_token_id
     if model.config.decoder_start_token_id is None and isinstance(tokenizer, MBartTokenizer):
@@ -496,7 +505,10 @@ def main():
                     writer.write(pred + "\n")
 
         output_eval_file = os.path.join(training_args.output_dir, basename + ".eval_results_seq2seq.txt")
-        first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file)
+        if "passivization" in data_args.validation_file:
+            first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file, passiv=True)
+        else:
+            first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file)
         if trainer.is_world_process_zero():
             with open(output_eval_file, "w") as writer:
                 writer.write(f"Exact match accuracy: {full_acc}\n")
@@ -541,7 +553,10 @@ def main():
                     writer.write(pred + "\n")
 
         output_eval_file = os.path.join(path, basename + ".eval_results_seq2seq.txt")
-        first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file)
+        if "passivization" in data_args.validation_file:
+            first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file, passiv=True)
+        else:
+            first_acc, full_acc = evaluate_predictions(output_pred_file, data_args.validation_file)
         it_res = re.match(".*checkpoint-([0-9]+)[/].*", path)
         it = it_res.group(1)
         if trainer.is_world_process_zero():

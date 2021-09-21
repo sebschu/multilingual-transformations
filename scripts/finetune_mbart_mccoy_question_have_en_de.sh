@@ -18,6 +18,9 @@ python ../models/run_seq2seq.py \
     --model_name_or_path 'facebook/mbart-large-cc25' \
     --do_train \
     --task translation_src_to_tgt \
+	--source_lang en_XX \
+	--target_lang en_XX \
+	--use_fast_tokenizer False \
     --train_file ../data/mccoy2020/question_have.en-de.train.json \
     --validation_file ../data/mccoy2020/question_have.de.dev.json \
     --output_dir /scratch/am12057/mbart-mccoy-finetuning-question-have-en-de/  \

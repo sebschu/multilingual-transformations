@@ -3,7 +3,7 @@
 #SBATCH --job-name=MT-base-eval-de-canaux
 #SBATCH --nodes=1 
 #SBATCH --cpus-per-task=1 
-#SBATCH --mem=20GB 
+#SBATCH --mem=24GB 
 #SBATCH --time=40:00:00 
 #SBATCH --gres=gpu:v100:1
 
@@ -19,9 +19,9 @@ python ../models/run_seq2seq.py \
 	--do_eval \
 	--do_learning_curve \
     --task translation_src_to_tgt \
-    --train_file ../data/question_have-can_de/question_have_can.en-de.train.json \
-    --validation_file ../data/question_have-can_de/question_have_can.de.gen_rc_s.json \
-    --output_dir $SCRATCH/mt5-mccoy-finetuning-question-have-can-en-de/  \
+    --train_file ../data/question_have-can_withquest_de/question_have_can.de.train.json \
+    --validation_file ../data/question_have-can_withquest_de/question_have_can.de.gen_rc_o.json \
+    --output_dir $SCRATCH/mt5-random-mccoy-finetuning-question-have-can-de/  \
     --per_device_train_batch_size=4 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
