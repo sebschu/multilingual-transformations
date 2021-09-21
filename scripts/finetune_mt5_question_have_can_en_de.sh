@@ -9,12 +9,12 @@
 
 
 
-singularity exec --nv --overlay $SCRATCH/overlay-50G-10M.ext3:ro /scratch/work/public/singularity/cuda10.2-cudnn7-devel-ubuntu18.04.sif /bin/bash -c "
+singularity exec --nv --overlay /scratch/am12057/overlay-50G-10M.ext3:ro /scratch/work/public/singularity/cuda10.2-cudnn7-devel-ubuntu18.04.sif /bin/bash -c "
 
 source /ext3/env.sh
 conda activate py38
 
-python ../models/run_seq2seq.py \
+CUDA_LAUNCH_BLOCKING=1 python ../models/run_seq2seq.py \
     --model_name_or_path 'google/mt5-base' \
     --do_train \
     --task translation_src_to_tgt \
