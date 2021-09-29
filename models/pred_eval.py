@@ -1,10 +1,11 @@
 import argparse
 import json
 
-def evaluate_predictions(pred_filename, gold_filename):
+def evaluate_predictions(pred_filename, gold_filename, passiv=False):
   
   '''
     returns first word accuracy, exact match accuracy
+    if passiv is True, return second word accuracy
   '''
   with open(pred_filename, "r") as pred_f, open(gold_filename) as gold_f:
     pred_lines = pred_f.readlines()
@@ -31,7 +32,9 @@ def evaluate_predictions(pred_filename, gold_filename):
       else:
         pred_words = pred_line.split()
         gold_words = gold_line.split()
-        if len(pred_words) > 0 and pred_words[0] == gold_words[0]:
+        if not passiv and len(pred_words) > 0 and pred_words[0] == gold_words[0]:
+          first_correct += 1
+        elif passiv and len(pred_words) > 1 and pred_words[1] == gold_words[1]:
           first_correct += 1
       
   
