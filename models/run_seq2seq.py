@@ -94,6 +94,11 @@ class ModelArguments:
             "help": "Randomize weights when loading a model."
         },
     )
+    random_layers: str = field(
+        default=None,
+        metadata={"help": "Randomize specific layers of the model. Format: comma-separated list of integers (e.g., `7,8,9` )."
+        },
+    )
 
 
 @dataclass
@@ -312,6 +317,8 @@ def main():
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
+    
+
     if model_args.random_weights:
         logger.info("Randomizing weights")
         model.init_weights()
