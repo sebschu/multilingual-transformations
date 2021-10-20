@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=MT-base-finetune-passiv-de
+#SBATCH --job-name=MT-base-finetune-passiv-en
 #SBATCH --nodes=1 
 #SBATCH --cpus-per-task=1 
 #SBATCH --mem=20GB 
@@ -17,13 +17,14 @@ python ../models/run_seq2seq.py \
     --do_train \
     --task translation_src_to_tgt \
 	--random_weights \
-    --train_file ../data/passiv_de_nps/passiv_de_nps.train.json \
-    --validation_file ../data/passiv_de_nps/passiv_de_nps.dev.json \
-    --output_dir /scratch/am12057/mt5-random-finetuning-passivization-de-nps/  \
+    --train_file ../data/passiv_en_nps/passiv_en_nps.train.json \
+    --validation_file ../data/passiv_en_nps/passiv_en_nps.dev.json \
+    --output_dir /scratch/am12057/mt5-random-finetuning-passivization-en-nps/  \
     --per_device_train_batch_size=4 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
     --predict_with_generate \
+	--save_steps 2000 \
 	--save_strategy epoch \
     --num_train_epochs 50
 "
