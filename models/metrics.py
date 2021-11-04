@@ -317,7 +317,7 @@ METRIC_FUNCTIONS = {
   "delete_none_prepose_main": delete_none_prepose_main
   }
   
-def compute_metrics(metrics, pred_file, gold_file):
+def compute_metrics(metrics, pred_file, gold_file, prefix=None):
   with open(pred_file, "r") as pred_f, open(gold_file) as gold_f:
     pred_lines = pred_f.readlines()
     gold_lines = gold_f.readlines()
@@ -328,6 +328,8 @@ def compute_metrics(metrics, pred_file, gold_file):
       pred_line = pred_lines[i].strip()
       if gold_file.endswith(".json"):
         gold_json = json.loads(gold_lines[i])
+        if prefix is not None and gold_json["translation"]["prefix"] != prefix:
+            continue
         gold_line = gold_json["translation"]["tgt"]
         src_line = gold_json["translation"]["src"]
       else:  
