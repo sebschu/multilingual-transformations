@@ -65,7 +65,33 @@ def delete_first_prepose_first(pred_sentence, gold_sentence, src_sentence):
       return 1
     
     return 0
-  
+ 
+def prepose_first(pred_sentence, gold_sentence, src_sentence):
+    pred_sentence.replace(",", " ,").replace("?", " ?").replace(".", " .").replace("  ", " ")
+    pred_words = pred_sentence.split()
+   
+    if len(pred_words) < 0 or pred_words[0] not in QUESTION_AUXILIARIES:
+      return 0
+   
+   
+    pred_aux = []
+    for word in pred_words:
+        if word in QUESTION_AUXILIARIES:
+          pred_aux.append(word)
+   
+   
+    src_words = src_sentence.split()
+    src_aux = []
+    for word in src_words:
+        if word in QUESTION_AUXILIARIES:
+          src_aux.append(word)
+   
+    if pred_aux[0] == src_aux[0]:
+      return 1
+    
+    return 0
+
+
 
 def delete_main_prepose_main(pred_sentence, gold_sentence, src_sentence):
     pred_sentence.replace(",", " ,").replace("?", " ?").replace(".", " .").replace("  ", " ")
@@ -274,8 +300,28 @@ def passive_second_np_no_pp(pred_sentence, gold_sentence, src_sentence):
   return 0
 
 
-
-
+def move_second_noun(pred_sentence, gold_sentence, src_sentence):
+  pred_sentence = pred_sentence.replace(",", "").replace("  ", " ")
+  src_sentence = src_sentence.replace(",", "").replace("  ", " ")
+  pred_words = pred_sentence.split()
+  src_words = src_sentence.split()
+  
+  second_noun = None
+  for i, word in enumerate(src_words):
+    if i == 0:
+      continue
+    if word in DETERMINERS:
+      second_noun = src_words[i+1]
+      break
+  
+  if second_noun is None:
+    return 0
+  
+  
+  if pred_words[1] == second_noun:
+    return 1
+  
+  return 0
 
 def passive_aux_present(pred_sentence, gold_sentence, src_sentence):
   pred_words = pred_sentence.split()
@@ -305,11 +351,13 @@ def identity(pred_sentence, gold_sentence, src_sentence):
 METRIC_FUNCTIONS = {
   "exact_match": exact_match,
   "first_word": first_word,
+  "prepose_first": prepose_first,
   "three_aux": three_auxiliaries, 
   "first_np": passive_first_np,
   "second_np": passive_second_np,
   "second_np_no_pp": passive_second_np_no_pp,
   "passive_aux_present": passive_aux_present,
+  "move_second_noun": move_second_noun,
   "identity": identity,
   "delete_first_prepose_first": delete_first_prepose_first,
   "delete_none_prepose_first": delete_none_prepose_first,
