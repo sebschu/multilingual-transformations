@@ -39,7 +39,7 @@ from transformers import (
     AutoTokenizer,
     DataCollatorForSeq2Seq,
     HfArgumentParser,
-    MBartTokenizer,
+    MBartTokenizer,MBartTokenizerFast,
     Seq2SeqTrainer,
     Seq2SeqTrainingArguments,
     default_data_collator,
@@ -53,6 +53,7 @@ import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
+MULTILINGUAL_TOKENIZERS = [MBartTokenizer, MBartTokenizerFast]
 
 @dataclass
 class ModelArguments:
@@ -191,6 +192,8 @@ class DataTrainingArguments:
     )
     source_lang: Optional[str] = field(default=None, metadata={"help": "Source language id for translation."})
     target_lang: Optional[str] = field(default=None, metadata={"help": "Target language id for translation."})
+    source_prefix: Optional[str] = field(default=None, metadata={"help": "Source prefix for tokenizer (for mBART)"})
+    target_prefix: Optional[str] = field(default=None, metadata={"help": "Target prefix for tokenizer (for mBART)"})
     eval_beams: Optional[int] = field(default=None, metadata={"help": "Number of beams to use for evaluation."})
     ignore_pad_token_for_loss: bool = field(
         default=True,
@@ -324,8 +327,8 @@ def main():
         model.init_weights()
 
     # Set decoder_start_token_id
-    if model.config.decoder_start_token_id is None and isinstance(tokenizer, MBartTokenizer):
-        model.config.decoder_start_token_id = tokenizer.lang_code_to_id[data_args.target_lang]
+    if model.config.decoder_start_token_id is None and isinstance(tokenizer, tuple(MULTILINGUAL_TOKENIZERS)):
+        model.config.decoder_start_token_id = tokenizer.convert_tokens_to_ids(data_args.target_prefix)
     if model.config.decoder_start_token_id is None:
         raise ValueError("Make sure that `config.decoder_start_token_id` is correctly defined")
 
@@ -346,13 +349,19 @@ def main():
     else:
         column_names = datasets["validation"].column_names
 
+    
     # For translation we set the codes of our source and target languages (only useful for mBART, the others will
     # ignore those attributes).
     if data_args.task.startswith("translation"):
-        if data_args.source_lang is not None:
+        if isinstance(tokenizer, tuple(MULTILINGUAL_TOKENIZERS)):
+            tokenizer.src_lang = data_args.source_prefix
+        elif data_args.source_lang is not None:
             tokenizer.src_lang = data_args.source_lang
-        if data_args.target_lang is not None:
+        if isinstance(tokenizer, tuple(MULTILINGUAL_TOKENIZERS)):
+            tokenizer.tgt_lang = data_args.target_prefix
+        elif data_args.target_lang is not None:
             tokenizer.tgt_lang = data_args.target_lang
+
 
     # To serialize preprocess_function below, each of those four variables needs to be defined (even if we won't use
     # them all).
