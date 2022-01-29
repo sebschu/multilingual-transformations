@@ -194,6 +194,12 @@ class DataTrainingArguments:
     target_lang: Optional[str] = field(default=None, metadata={"help": "Target language id for translation."})
     source_prefix: Optional[str] = field(default=None, metadata={"help": "Source prefix for tokenizer (for mBART)"})
     target_prefix: Optional[str] = field(default=None, metadata={"help": "Target prefix for tokenizer (for mBART)"})
+    prefix_from_file: bool = field(
+        default=False,
+        metadata={
+            "help": "Whether to set language ids independently for each example."
+        },
+    )
     eval_beams: Optional[int] = field(default=None, metadata={"help": "Number of beams to use for evaluation."})
     ignore_pad_token_for_loss: bool = field(
         default=True,
@@ -328,9 +334,10 @@ def main():
 
     # Set decoder_start_token_id
     if model.config.decoder_start_token_id is None and isinstance(tokenizer, tuple(MULTILINGUAL_TOKENIZERS)):
-        model.config.decoder_start_token_id = tokenizer.convert_tokens_to_ids(data_args.target_prefix)
-    if model.config.decoder_start_token_id is None:
-        raise ValueError("Make sure that `config.decoder_start_token_id` is correctly defined")
+        if data_args.target_prefix:
+            model.config.decoder_start_token_id = tokenizer.convert_tokens_to_ids(data_args.target_prefix)
+        elif not data_args.prefix_from_file:
+            raise ValueError("Make sure that `config.decoder_start_token_id` is correctly defined")
 
     # Get the default prefix if None is passed.
     if data_args.source_prefix is None:
@@ -354,14 +361,19 @@ def main():
     # ignore those attributes).
     if data_args.task.startswith("translation"):
         if isinstance(tokenizer, tuple(MULTILINGUAL_TOKENIZERS)):
-            tokenizer.src_lang = data_args.source_prefix
+            if data_args.source_prefix:
+                tokenizer.src_lang = data_args.source_prefix
+            elif data_args.prefix_from_file:
+                tokenizer.src_lang = "en_XX"    # placeholder value
         elif data_args.source_lang is not None:
             tokenizer.src_lang = data_args.source_lang
         if isinstance(tokenizer, tuple(MULTILINGUAL_TOKENIZERS)):
-            tokenizer.tgt_lang = data_args.target_prefix
+            if data_args.target_prefix:
+                tokenizer.tgt_lang = data_args.target_prefix
+            elif data_args.prefix_from_file:
+                tokenizer.tgt_lang = "en_XX"    # placeholder value
         elif data_args.target_lang is not None:
             tokenizer.tgt_lang = data_args.target_lang
-
 
     # To serialize preprocess_function below, each of those four variables needs to be defined (even if we won't use
     # them all).
@@ -391,7 +403,6 @@ def main():
     padding = "max_length" if data_args.pad_to_max_length else False
 
     def preprocess_function(examples):
-
         inputs = [ex["prefix"] + ex["src"] for ex in examples["translation"]]
         targets = [ex["tgt"] for ex in examples["translation"]]
 
@@ -401,6 +412,14 @@ def main():
         # Setup the tokenizer for targets
         with tokenizer.as_target_tokenizer():
             labels = tokenizer(targets, max_length=max_target_length, padding=padding, truncation=True)
+
+        if data_args.prefix_from_file:
+            lang_ids = [tokenizer.convert_tokens_to_ids(ex["lang"]) for ex in examples["translation"]]
+            for idx, (model_input, label) in enumerate(zip(model_inputs["input_ids"], labels["input_ids"])):
+                model_input[-1] = lang_ids[idx]
+                label[-1] = lang_ids[idx] 
+                label = [lang_ids[idx]] + label
+
 
         # If we are padding here, replace all tokenizer.pad_token_id in the labels by -100 when we want to ignore
         # padding in the loss.
