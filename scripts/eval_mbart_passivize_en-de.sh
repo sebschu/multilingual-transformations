@@ -22,7 +22,7 @@ python ../models/run_seq2seq.py \
 	--source_prefix de_DE \
 	--target_prefix de_DE \
     --train_file ../data/passiv_en-de_nps/passiv_en-de_nps.train.lang_id.json \
-    --validation_file ../data/passiv_en-de_nps/passiv_de_nps.gen_pp_s.lang_id.json \
+    --validation_file ../data/passiv_en-de_nps/passiv_de_nps.gen_pp_o.lang_id.json \
     --output_dir $SCRATCH/mbart-cc-finetuning-passivization-en-de-zs/  \
     --per_device_train_batch_size=4 \
     --per_device_eval_batch_size=16 \
