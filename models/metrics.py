@@ -19,7 +19,12 @@ def first_word(pred_sentence, gold_sentence, src_sentence):
     return 1
   return 0
 
-
+def second_word(pred_sentence, gold_sentence, src_sentence):
+  pred_words = pred_sentence.split()
+  gold_words = gold_sentence.split()
+  if len(pred_words) > 1 and pred_words[1].lower() == gold_words[1].lower():
+    return 1
+  return 0
 
 
 QUESTION_AUXILIARIES = set(["have", "haven't", "has", "hasn't", "hat", "haben", "ist", "sind", "kann", "k\xf6nnen"])
@@ -532,6 +537,7 @@ def identity(pred_sentence, gold_sentence, src_sentence):
 METRIC_FUNCTIONS = {
   "exact_match": exact_match,
   "first_word": first_word,
+  "second_word": second_word,
   "prepose_first": prepose_first,
   "three_aux": three_auxiliaries,
   "first_np": passive_first_np,
