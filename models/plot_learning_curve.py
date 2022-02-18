@@ -64,14 +64,24 @@ def main():
       plt.ylim([-0.05, 1.05])
       plt.xlabel("Tuning Iterations")
       plt.ylabel("Accuracy")
-      if "passiv_en" in args.gold_filename:
+      if "passiv_en_nps/" in args.gold_filename:
         title = "English Passivization"
-      elif "passiv_de" in args.gold_filename:
+      elif "passiv_de_nps/" in args.gold_filename:
         title = "German Passivization"
       elif "have-havent_en" in args.gold_filename:
         title = "English Question Formation"
       elif "have-can_withquest_de" in args.gold_filename:
         title = "German Question Formation"
+      elif "passiv_en-de" in args.gold_filename:
+        if "pp_o" in args.gold_filename:
+          title = "Zero-shot German Passivization (PP on obj)"
+        if "pp_s" in args.gold_filename:
+          title = "Zero-shot German Passivization (PP on subj)"
+      elif "have-can_de" in args.gold_filename:
+        if "rc_o" in args.gold_filename:
+          title = "Zero-shot German Question Formation (RC on obj)"
+        elif "rc_s" in args.gold_filename:
+          title = "Zero-shot German Question Formation (RC on subj)"
       else:
         title = None
       if title is not None:
