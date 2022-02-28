@@ -20,7 +20,7 @@ We use the following:
 * `models/metrics.py`: implementation of each accuracy and error analysis metric used in our experiments
 * `models/pred_eval.py`: for defining the output metrics used when evaluating models' transformational abilities
 * `models/plot_learning_curve.py`: for plotting paper-ready learning curves
-* `scripts/finetune_*_question_have_{language}.sh`: question formation fine-tuning scripts
+* `scripts/finetune_{model}_question_have_{language}.sh`: question formation fine-tuning scripts
 * `scripts/eval_{model}_question_have_{language}.sh`: question formation evaluation scripts
 * `scripts/finetune_{model}_passivize_{language}.sh`: passivization fine-tuning scripts
 * `scripts/eval_{model}_passivize_{language}.sh`: passivization evaluation scripts
