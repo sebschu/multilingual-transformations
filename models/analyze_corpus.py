@@ -4,6 +4,9 @@ import argparse
 from datasets import load_dataset
 from tqdm import tqdm
 
+QUESTION_AUXILIARIES = set(["have", "haven't", "has", "hasn't", "do", "don't", "does", "doesn't", "is", "isn't", "are", "aren't", "hat", "haben", "ist", "sind", "kann", "k\xf6nnen"])
+JACCARD_THRESHOLD = 0.7     # totally arbitrary
+
 # UTILITY FUNCTIONS
 def reverse_insort(a, x, lo=0, hi=None):
     """Insert item x in list a, and keep it reverse-sorted.
@@ -50,10 +53,12 @@ if __name__ == "__main__":
                         help="Language on which we perform the corpus analysis.")
     parser.add_argument("-m", "--metric", type=str, default="jaccard_sim",
                         help="Similarity metric for comparing sentences.")
-    parser.add_argument("-i", "--ignore-case", action="store_true", default=False,
+    parser.add_argument("-i", "--ignore-case", action="store_true",
                         help="Whether to ignore casing in input text.")
-    parser.add_argument("-n", "--num_sents", type=int, default=50,
+    parser.add_argument("-n", "--num-sents", type=int, default=50,
                         help="Display the top <num_sents> sentences by similarity.")
+    parser.add_argument("-p", "--print-sents", action="store_true",
+                        help="Print all sentences meeting extra criteria. Overrides --num_sents.")
     args = parser.parse_args()
 
 
@@ -94,17 +99,34 @@ if __name__ == "__main__":
 
             sent_sim = METRIC_FUNCTIONS[args.metric](sent_1, sent_2)
             sent_tuple = ([sent_1, sent_2], sent_sim)
-            if len(max_sim_sents) < args.num_sents:
-                reverse_insort(max_sim_sents, sent_tuple)
-            elif sent_sim > max_sim_sents[-1][1]:
-                reverse_insort(max_sim_sents, sent_tuple)
-                max_sim_sents.pop()
 
-    max_sim_sents = reversed(max_sim_sents)
-    for sent_tuple in max_sim_sents:
-        sent_1, sent_2 = sent_tuple[0]
-        sent_sim = sent_tuple[1]
-        print(f"{args.metric}: {sent_sim}")
-        print(f"\n{' '.join(sent_1)}\n---\n{' '.join(sent_2)}\n")
-        print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
-    print(f"# skipped documents: {skipped}")
+            if args.print_sents:
+                # extra criteria
+                if sent_sim < JACCARD_THRESHOLD:
+                    continue
+                aux_near_beginning = False
+                for i in range(min(len(sent_1), len(sent_2), 3)):
+                    if sent_1[i] in QUESTION_AUXILIARIES or sent_2[i] in QUESTION_AUXILIARIES:
+                        aux_near_beginning = True
+                if not aux_near_beginning:
+                    continue
+                # met all the criteria! print sentence
+                print(f"{args.metric}: {sent_sim}")
+                print(f"{' '.join(sent_1)}\n---\n{' '.join(sent_2)}")
+                print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+            else:       # just print the k top sentences at the end
+                if len(max_sim_sents) < args.num_sents:
+                    reverse_insort(max_sim_sents, sent_tuple)
+                elif sent_sim > max_sim_sents[-1][1]:
+                    reverse_insort(max_sim_sents, sent_tuple)
+                    max_sim_sents.pop()
+
+    if not args.print_sents:
+        max_sim_sents = reversed(max_sim_sents)
+        for sent_tuple in max_sim_sents:
+            sent_1, sent_2 = sent_tuple[0]
+            sent_sim = sent_tuple[1]
+            print(f"{args.metric}: {sent_sim}")
+            print(f"\n{' '.join(sent_1)}\n---\n{' '.join(sent_2)}\n")
+            print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+        print(f"# skipped documents: {skipped}")
