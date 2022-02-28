@@ -49,7 +49,7 @@ To fine-tune a model with randomly initialized parameters, use the `--random_wei
 Our evaluation scripts are also provided in `scripts/`. The file format is `finetune_{model_name}_{transformation_type}_{language}`. Here, be sure to use both the `--do_learning_curve` and `--predict_with_generate` arguments. These scripts evaluate each checkpoint in `--output_dir`, writing accuracy and prediction files in each checkpoint directory. At the end, the script will also produce a learning curve figure in `--output_dir`.
 
 ### Metrics
-For evaluation, we primarily focus on **sequence accuracy** and **first/second word accuracy**. Sequence accuracy measures how many transformations were performed exactly correctly, as measured by the reference and output transformations containing the same tokens in the same order. First word accuracy (used for question formation) measures how many transformations contain the correct auxiliary at the start of the sentence. Second word accuracy (used for passivization) measures how many transformations inverted the correct object noun.
+For evaluation, we primarily focus on **sequence accuracy** and **first/second word accuracy**. Sequence accuracy (`exact_match`) measures how many transformations were performed exactly correctly, as measured by the reference and output transformations containing the same tokens in the same order. First word accuracy (`first_word`; used for question formation) measures how many transformations contain the correct auxiliary at the start of the sentence. Second word accuracy (`second_word`; used for passivization) measures how many transformations inverted the correct object noun.
 
 We also use other metrics for error analysis. These include: (TODO)
 
