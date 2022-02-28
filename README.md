@@ -52,12 +52,31 @@ Our evaluation scripts are also provided in `scripts/`. The file format is `fine
 For evaluation, we primarily focus on **sequence accuracy** and **first/second word accuracy**. Sequence accuracy measures how many transformations were performed exactly correctly, as measured by the reference and output transformations containing the same tokens in the same order. First word accuracy (used for question formation) measures how many transformations contain the correct auxiliary at the start of the sentence. Second word accuracy (used for passivization) measures how many transformations inverted the correct object noun.
 
 We also use other metrics for error analysis. These include: (TODO)
-- 
-- 
 
 ## Visualizations
 Our paper-ready learning curves were created using `models/plot_learning_curve.py`. This must be run after the evaluation script, as it relies on the prediction files for each checkpoint. Here's an example:
 
 ```
 python plot_learning_curve.py --checkpoint_dir <dir_containing_checkpoints> --gold_filename <gen_or_test_file> --metrics "exact_match,first_word"
+```
+
+## Non-pre-trained Baselines
+In our paper, we compare pre-trained seq2seq models to non-pre-trained seq2seq models trained from scratch on syntactic transformations. For the non-pre-trained models, we used the [transductions repository](https://github.com/clay-lab/transductions), developed by the [CLAY Lab](http://clay.yale.edu) at Yale University.
+
+## License
+Our code is made available under an [MIT License](https://github.com/sebschu/multilingual-transformations/blob/main/LICENSE).
+
+## Citation
+If you use or modify the materials in this repository, please use the following citation:
+
+```
+@inproceedings{mueller-2022-coloring,
+    title = "Coloring the Blank Slate: Pre-training Imparts a Hierarchical Inductive Bias to Sequence-to-sequence Models",
+    author = "Mueller, Aaron and Frank, Robert and Linzen, Tal and Wang, Luheng and Schuster, Sebastian",
+    booktitle = "Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = may,
+    year = "2022",
+    address = "Online",
+    publisher = "Association for Computational Linguistics"
+}
 ```
