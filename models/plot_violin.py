@@ -29,6 +29,7 @@ def main():
       argparser.add_argument("--checkpoint_dirs")
       argparser.add_argument("--gold_filename")
       argparser.add_argument("--metrics")
+      argparser.add_argument("--move_legend", action="store_true")
       
       argparser.add_argument("--out_dir", default=".")    
       args = argparser.parse_args()
@@ -49,7 +50,8 @@ def main():
           pred_filename = os.path.join(path, basename + ".eval_preds_seq2seq.txt")
           it_res = re.match(".*checkpoint-([0-9]+)[/].*", path)
           it = int(it_res.group(1))
-          # if it > 1000:
+          if it < 1000:
+            continue
           model_results[model_name][it] = compute_metrics(metric_names, pred_filename, args.gold_filename) 
    
       metric_rename = {}
@@ -73,9 +75,26 @@ def main():
                         value_vars=metric_rename.values(),
                         var_name='Metric', value_name='Accuracy')
 
-      ax = sns.violinplot(x='Model', y='Accuracy', hue='Metric', data=df,
-                          cut=0, inner='quartile')
-      plt.legend(loc="lower right")
+      # plot violins to summarize distributions
+      # ax = sns.violinplot(x='Model', y='Accuracy', hue='Metric', data=df,
+      #                    cut=0.1)# , inner='quartile')
+      # plot distribution as individual points
+      ax = sns.stripplot(x='Model', y='Accuracy', hue='Metric', data=df, jitter=True, 
+                         dodge=True, alpha=.3, zorder=1)
+      # plot mean points
+      red = ["#FF0000", "#FF0000"]
+      sns.set_palette(red)
+      sns.pointplot(x="Model", y="Accuracy", hue="Metric",
+        data=df, dodge=.8 - .8 / 2,
+        join=False,
+        markers="d", ci=None)
+      # add points over the violin
+      handles, labels = ax.get_legend_handles_labels()
+      if not args.move_legend:
+        loc = "lower right"
+      else:
+        loc = "center right"
+      plt.legend(handles[:2], labels[:2], loc=loc)
       plt.ylim([-0.05, 1.05])
       if "passiv_en_nps/" in args.gold_filename:
         title = "English Passivization"
