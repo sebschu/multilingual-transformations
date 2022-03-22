@@ -73,7 +73,7 @@ If you use or modify the materials in this repository, please use the following 
 @inproceedings{mueller-2022-coloring,
     title = "Coloring the Blank Slate: Pre-training Imparts a Hierarchical Inductive Bias to Sequence-to-sequence Models",
     author = "Mueller, Aaron and Frank, Robert and Linzen, Tal and Wang, Luheng and Schuster, Sebastian",
-    booktitle = "Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    booktitle = "Findings of the Association for Computational Linguistics: ACL 2022",
     month = may,
     year = "2022",
     address = "Online",
