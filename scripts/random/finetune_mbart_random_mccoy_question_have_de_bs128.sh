@@ -17,15 +17,17 @@ python ../models/run_seq2seq.py \
     --do_train \
     --do_eval \
     --task translation_src_to_tgt \
-    --train_file ../data/question_have-can_de/question_have_can.en-de.train.lang_id.json \
-    --validation_file ../data/question_have-can_de/question_have_can.de.dev.lang_id.json \
-    --output_dir $SCRATCH/mbart-cc-mccoy-finetuning-question-have-en-de-zs-bs128/    \
-    --prefix_from_file \
+    --random_weights \
+    --train_file ../../data/question_have-can_withquest_de/question_have_can.de.train.json \
+    --validation_file ../../data/question_have-can_withquest_de/question_have_can.de.dev.json \
+    --output_dir $SCRATCH/mbart-cc-mccoy-random-finetuning-question-have-can-withquest-de-bs128/     \
+    --source_prefix de_DE \
     --target_prefix de_DE \
     --per_device_train_batch_size=8 \
     --gradient_accumulation_steps=16 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
     --predict_with_generate \
+    --save_steps 20000 \
     --num_train_epochs 10.0
 "

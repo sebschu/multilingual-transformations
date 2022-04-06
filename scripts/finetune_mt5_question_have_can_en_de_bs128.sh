@@ -22,7 +22,7 @@ CUDA_LAUNCH_BLOCKING=1 python ../models/run_seq2seq.py \
     --validation_file ../data/question_have-can_de/question_have_can.de.dev.json \
     --output_dir /scratch/am12057/mt5-mccoy-finetuning-question-have-can-en-de-zs-bs128/  \
     --per_device_train_batch_size=8 \
-	--gradient_accumulation_steps=16 \
+    --gradient_accumulation_steps=16 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
     --predict_with_generate \

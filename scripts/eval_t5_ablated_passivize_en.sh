@@ -15,13 +15,13 @@ source /ext3/env.sh
 conda activate py38
 
 python ../models/run_seq2seq.py \
-    --model_name_or_path 'google/mt5-base' \
+    --model_name_or_path 'google/t5-efficient-base-$1' \
     --do_eval \
     --do_learning_curve \
     --task translation_src_to_tgt \
     --train_file ../data/passiv_en_nps/passiv_en_nps.train.json \
-    --validation_file ../data/passiv_en_nps/passiv_en_nps.gen.json \
-    --output_dir $SCRATCH/mt5-finetuning-passivization-en-nps-bs128/  \
+    --validation_file ../data/passiv_en_nps/passiv_en_nps.$2.json \
+    --output_dir $SCRATCH/t5-$1-finetuning-passivization-en-nps-bs128/  \
     --per_device_train_batch_size=128 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \

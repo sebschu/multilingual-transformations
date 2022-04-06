@@ -16,11 +16,11 @@ conda activate py38
 
 python ../models/run_seq2seq.py \
     --model_name_or_path 'facebook/mbart-large-cc25' \
-	--do_eval \
-	--do_learning_curve \
+    --do_eval \
+    --do_learning_curve \
     --task translation_src_to_tgt \
-	--source_prefix en_XX \
-	--target_prefix en_XX \
+    --source_prefix en_XX \
+    --target_prefix en_XX \
     --train_file ../data/question_have-havent_en/question_have.train.json \
     --validation_file ../data/question_have-havent_en/question_have.gen.json \
     --output_dir $SCRATCH/mbart-cc-mccoy-finetuning-question-have-bs128/  \

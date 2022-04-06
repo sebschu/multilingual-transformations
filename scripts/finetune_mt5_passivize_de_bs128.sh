@@ -16,11 +16,11 @@ python ../models/run_seq2seq.py \
     --model_name_or_path 'google/mt5-base' \
     --do_train \
     --task translation_src_to_tgt \
-    --train_file ../data/passiv_de/passiv_de.train.json \
-    --validation_file ../data/passiv_de/passiv_de.dev.json \
-    --output_dir /scratch/am12057/mt5-finetuning-passivization-de-bs128/  \
-    --per_device_train_batch_size=32 \
-	--gradient_accumulation_steps=4 \
+    --train_file ../data/passiv_de_nps/passiv_de_nps.train.json \
+    --validation_file ../data/passiv_de_nps/passiv_de_nps.dev.json \
+    --output_dir /scratch/am12057/mt5-finetuning-passivization-de-nps-bs128/  \
+    --per_device_train_batch_size=16 \
+    --gradient_accumulation_steps=8 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
     --predict_with_generate \

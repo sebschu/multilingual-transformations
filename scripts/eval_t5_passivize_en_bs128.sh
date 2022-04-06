@@ -16,8 +16,8 @@ conda activate py38
 
 python ../models/run_seq2seq.py \
     --model_name_or_path 't5-base' \
-	--do_eval \
-	--do_learning_curve \
+    --do_eval \
+    --do_learning_curve \
     --task translation_src_to_tgt \
     --train_file ../data/passiv_en_nps/passiv_en_nps.train.json \
     --validation_file ../data/passiv_en_nps/passiv_en_nps.test.json \

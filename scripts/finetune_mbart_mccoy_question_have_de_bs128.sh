@@ -19,11 +19,11 @@ python ../models/run_seq2seq.py \
     --task translation_src_to_tgt \
     --train_file ../data/question_have-can_withquest_de/question_have_can.de.train.json \
     --validation_file ../data/question_have-can_withquest_de/question_have_can.de.dev.json \
-    --output_dir $SCRATCH/mbart-cc-mccoy-finetuning-question-have-can-withquest-de-bs128/	 \
-	--source_prefix de_DE \
-	--target_prefix de_DE \
+    --output_dir $SCRATCH/mbart-cc-mccoy-finetuning-question-have-can-withquest-de-bs128/    \
+    --source_prefix de_DE \
+    --target_prefix de_DE \
     --per_device_train_batch_size=8 \
-	--gradient_accumulation_steps=16 \
+    --gradient_accumulation_steps=16 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
     --predict_with_generate \

@@ -20,7 +20,7 @@ python ../models/run_seq2seq.py \
     --validation_file ../data/passiv_en-de_nps/passiv_de_nps.dev.json \
     --output_dir /scratch/am12057/mt5-finetuning-passivization-en-de-zs-bs128/  \
     --per_device_train_batch_size=16 \
-	--gradient_accumulation_steps=8 \
+    --gradient_accumulation_steps=8 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
     --predict_with_generate \

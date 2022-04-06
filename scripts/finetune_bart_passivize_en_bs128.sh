@@ -20,11 +20,11 @@ python ../models/run_seq2seq.py \
     --validation_file ../data/passiv_en_nps/passiv_en_nps.dev.json \
     --output_dir /scratch/am12057/mbart-cc-finetuning-passivization-en-nps-bs128/  \
     --per_device_train_batch_size=64 \
-	--gradient_accumulation_steps=2 \
+    --gradient_accumulation_steps=2 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
     --predict_with_generate \
-	--logging_steps=150 \
-	--eval_steps=150 \
+    --logging_steps=150 \
+    --eval_steps=150 \
     --num_train_epochs 10.0
 "

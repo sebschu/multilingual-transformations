@@ -14,8 +14,8 @@ conda activate py38
 
 python ../models/run_seq2seq.py \
     --model_name_or_path 'google/mt5-base' \
-	--do_eval \
-	--do_learning_curve \
+    --do_eval \
+    --do_learning_curve \
     --task translation_src_to_tgt \
     --train_file ../data/question_have-can_de/question_have_can.en-de.train.json \
     --validation_file ../data/question_have-can_de/question_have_can.de.gen_rc_s.json \

@@ -13,18 +13,20 @@ source /ext3/env.sh
 conda activate py38
 
 python ../models/run_seq2seq.py \
-    --model_name_or_path 't5-base' \
+    --model_name_or_path 'facebook/mbart-large-cc25' \
     --do_train \
     --task translation_src_to_tgt \
-    --train_file ../data/passiv_en_nps/passiv_en_nps.train.json \
-    --validation_file ../data/passiv_en_nps/passiv_en_nps.dev.json \
-    --output_dir /scratch/am12057/mt5-finetuning-passivization-en-nps-bs128/  \
+    --random_weights \
+    --train_file ../../data/passiv_en_nps/passiv_en_nps.train.json \
+    --validation_file ../../data/passiv_en_nps/passiv_en_nps.dev.json \
+    --output_dir /scratch/am12057/mbart-cc-random-finetuning-passivization-en-nps-bs128/  \
     --per_device_train_batch_size=64 \
     --gradient_accumulation_steps=2 \
     --per_device_eval_batch_size=16 \
+    --source_prefix en_XX \
+    --target_prefix en_XX \
     --overwrite_output_dir \
     --predict_with_generate \
-    --logging_steps=150 \
-    --eval_steps=150 \
+    --save_steps 20000 \
     --num_train_epochs 10.0
 "

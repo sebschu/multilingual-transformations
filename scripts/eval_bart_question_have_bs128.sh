@@ -15,8 +15,8 @@ conda activate py38
 
 python ../models/run_seq2seq.py \
     --model_name_or_path 'facebook/bart-base' \
-	--do_eval \
-	--do_learning_curve \
+    --do_eval \
+    --do_learning_curve \
     --task translation_src_to_tgt \
     --train_file ../data/question_have-havent_en/question_have.train.json \
     --validation_file ../data/question_have-havent_en/question_have.test.json \

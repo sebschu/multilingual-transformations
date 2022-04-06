@@ -19,10 +19,10 @@ python ../models/run_seq2seq.py \
     --train_file ../data/passiv_de_nps/passiv_de_nps.train.json \
     --validation_file ../data/passiv_de_nps/passiv_de_nps.dev.json \
     --output_dir /scratch/am12057/mbart-cc-finetuning-passivization-de-bs128/  \
-	--source_prefix de_DE \
-	--target_prefix de_DE \
+    --source_prefix de_DE \
+    --target_prefix de_DE \
     --per_device_train_batch_size=16 \
-	--gradient_accumulation_steps=8 \
+    --gradient_accumulation_steps=8 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \
     --predict_with_generate \

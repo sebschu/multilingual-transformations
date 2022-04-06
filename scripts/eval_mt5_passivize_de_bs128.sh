@@ -16,12 +16,12 @@ conda activate py38
 
 python ../models/run_seq2seq.py \
     --model_name_or_path 'google/mt5-base' \
-	--do_eval \
-	--do_learning_curve \
+    --do_eval \
+    --do_learning_curve \
     --task translation_src_to_tgt \
     --train_file ../data/passiv_de_nps/passiv_de_nps.train.json \
-    --validation_file ../data/passiv_de_nps/passiv_de_nps.test.json \
-    --output_dir $SCRATCH/mt5-finetuning-passivization-de-bs128/  \
+    --validation_file ../data/passiv_de_nps/passiv_de_nps.gen.json \
+    --output_dir $SCRATCH/mt5-finetuning-passivization-de-nps-bs128/  \
     --per_device_train_batch_size=128 \
     --per_device_eval_batch_size=16 \
     --overwrite_output_dir \

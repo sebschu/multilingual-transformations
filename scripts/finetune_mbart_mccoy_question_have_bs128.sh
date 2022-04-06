@@ -19,12 +19,12 @@ python ../models/run_seq2seq.py \
     --task translation_src_to_tgt \
     --train_file ../data/question_have-havent_en/question_have.train.json \
     --validation_file ../data/question_have-havent_en/question_have.dev.json \
-    --output_dir $SCRATCH/mbart-cc-mccoy-finetuning-question-have-bs128/	 \
+    --output_dir $SCRATCH/mbart-cc-mccoy-finetuning-question-have-bs128/     \
     --per_device_train_batch_size=16 \
-	--gradient_accumulation_steps=8 \
+    --gradient_accumulation_steps=8 \
     --per_device_eval_batch_size=16 \
-	--source_prefix en_XX \
-	--target_prefix en_XX \
+    --source_prefix en_XX \
+    --target_prefix en_XX \
     --overwrite_output_dir \
     --predict_with_generate \
     --num_train_epochs 10.0
