@@ -18,7 +18,7 @@ python ../models/run_seq2seq.py \
     --task translation_src_to_tgt \
     --train_file ../data/passiv_en_nps/passiv_en_nps.train.json \
     --validation_file ../data/passiv_en_nps/passiv_en_nps.dev.json \
-    --output_dir /scratch/am12057/mt5-finetuning-passivization-en-nps-bs128/  \
+    --output_dir /scratch/am12057/t5-finetuning-passivization-en-nps-bs128/  \
     --per_device_train_batch_size=64 \
     --gradient_accumulation_steps=2 \
     --per_device_eval_batch_size=16 \
