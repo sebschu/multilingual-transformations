@@ -13,7 +13,7 @@ source /ext3/env.sh
 conda activate py38
 
 python ../models/run_seq2seq.py \
-    --model_name_or_path 'google/mt5-base' \
+    --model_name_or_path 't5-base' \
     --do_train \
     --task translation_src_to_tgt \
     --train_file ../data/passiv_en_nps/passiv_en_nps.train.json \
