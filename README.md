@@ -51,7 +51,14 @@ Our evaluation scripts are also provided in `scripts/`. The file format is `fine
 ### Metrics
 For evaluation, we primarily focus on **sequence accuracy** and **first/second word accuracy**. Sequence accuracy (`exact_match`) measures how many transformations were performed exactly correctly, as measured by the reference and output transformations containing the same tokens in the same order. First word accuracy (`first_word`; used for question formation) measures how many transformations contain the correct auxiliary at the start of the sentence. Second word accuracy (`second_word`; used for passivization) measures how many transformations inverted the correct object noun.
 
-We also use other metrics for error analysis. These include: (TODO)
+We also use other metrics for error analysis. These include:
+* `second_np`: In passivization, is the second NP (including any attached PPs) in a passive correct?
+* `second_np_no_pp`: In passivization, is the second noun in a passive correct?
+* `first_np_case_incorrect`: In German passivization, is the case of the first NP wrong?
+* `prepose_first`: In question formation, is the first auxiliary fronted?
+
+All of our metrics are implemented in `models/metrics.py`.
+
 
 ## Visualizations
 Our paper-ready learning curves were created using `models/plot_learning_curve.py`. This must be run after the evaluation script, as it relies on the prediction files for each checkpoint. Here's an example:
@@ -70,13 +77,20 @@ Our code is made available under an [MIT License](https://github.com/sebschu/mul
 If you use or modify the materials in this repository, please use the following citation:
 
 ```
-@inproceedings{mueller-2022-coloring,
+@inproceedings{mueller-etal-2022-coloring,
     title = "Coloring the Blank Slate: Pre-training Imparts a Hierarchical Inductive Bias to Sequence-to-sequence Models",
-    author = "Mueller, Aaron and Frank, Robert and Linzen, Tal and Wang, Luheng and Schuster, Sebastian",
+    author = "Mueller, Aaron  and
+      Frank, Robert  and
+      Linzen, Tal  and
+      Wang, Luheng  and
+      Schuster, Sebastian",
     booktitle = "Findings of the Association for Computational Linguistics: ACL 2022",
     month = may,
     year = "2022",
-    address = "Online",
-    publisher = "Association for Computational Linguistics"
+    address = "Dublin, Ireland",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.findings-acl.106",
+    doi = "10.18653/v1/2022.findings-acl.106",
+    pages = "1352--1368",
 }
 ```
