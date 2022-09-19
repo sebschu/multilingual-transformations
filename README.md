@@ -1,5 +1,5 @@
 # Multilingual Syntactic Transformations
-This repository contains code for replicating the experiments of [Coloring the Blank Slate: Pre-training Imparts a Hierarchical Inductive Bias to Sequence-to-sequence Models](https://openreview.net/pdf?id=ztZ70wprmjY).
+This repository contains code for replicating the experiments of [Coloring the Blank Slate: Pre-training Imparts a Hierarchical Inductive Bias to Sequence-to-sequence Models](https://aclanthology.org/2022.findings-acl.106/), published in Findings of ACL 2022.
 
 ## Dependencies
 Use `conda env create -f environment.yml` to replicate our conda environment.
